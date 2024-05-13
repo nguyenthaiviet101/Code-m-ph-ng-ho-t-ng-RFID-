@@ -1,0 +1,56 @@
+#include <Servo.h>
+
+
+int count = 0;
+char c;
+String id;
+Servo myservo;
+
+void setup() {
+  Serial.begin(9600); 
+  myservo.attach(9);
+  myservo.write(0);
+ 
+  Serial.println("Please scan your RFID TAG");
+ 
+}
+
+void loop() {
+  while(Serial.available()>0)
+  {
+    c = Serial.read();
+   count++;
+   id += c;
+   if(count == 5)  
+    {
+      Serial.print(id);
+      //break;
+     
+      if(id=="ABC11")  //Define valid tag id here
+      {
+        Serial.println("Valid TAG");
+        myservo.write(180);
+        delay(3000);
+        myservo.write(0);  
+      }
+  
+      else if(id=="ABC22")  //Define valid tag id here
+      {
+        Serial.println("Valid TAG");
+        myservo.write(180);
+        delay(3000);
+        myservo.write(0);  
+      }
+      else 
+      {
+      digitalWrite(13, LOW);
+      Serial.println("Invalid TAG");
+      myservo.write(0); 
+      }
+    }
+  }
+  count = 0;
+  id="";
+  delay(500);
+
+}
